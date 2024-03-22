@@ -13,6 +13,9 @@ on:
 jobs:
   patch-tag:
     runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.tag_version.outputs.new_tag }}
+      previous_tag: ${{ steps.tag_version.outputs.previous_tag }}
     steps:
       - uses: actions/checkout@v4
       - name: Bump version and push tag
@@ -44,13 +47,14 @@ jobs:
 
       - name: Show Tag Name
         env:
-          VERSION: ${{ env.SOURCE_TAG }}
+          VERSION: ${{ needs.patch-tag.outputs.new_tag }}
         run: |
           echo "Tag is: ${SOURCE_TAG} and version: ${VERSION}"
 
   deploy:
     runs-on: ubuntu-latest
     needs:
+      - patch-tag
       - build-push-docker
     steps:
       - name: Checkout repository
@@ -63,6 +67,6 @@ jobs:
 
       - name: Show Tag Name
         env:
-          VERSION: ${{ env.SOURCE_TAG }}
+          VERSION: ${{ needs.patch-tag.outputs.new_tag }}
         run: |
           echo "Tag is: ${SOURCE_TAG} and version: ${VERSION}"
