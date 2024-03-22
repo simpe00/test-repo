@@ -1,0 +1,33 @@
+name: 11-auto-versioning
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main']
+
+
+jobs:
+  Patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Minor version for each merge
+        id: AutoTagger
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DRY_RUN: false
+#          DEFAULT_BRANCH: build-push-deploy-testing
+
+      - name: echo new tag
+        run: |
+          echo "The next tag version will be: ${{ steps.AutoTagger.outputs.new_tag }}"
+      - name: echo tag
+        run: |
+          echo "The current tag is: ${{ steps.AutoTagger.outputs.tag }}"
+      - name: echo part
+        run: |
+          echo "The version increment was: ${{ steps.AutoTagger.outputs.part }}"

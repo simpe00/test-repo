@@ -1,0 +1,39 @@
+#name: 12-azure-deploy-on-testing
+#
+#on:
+#  workflow_run:
+#    workflows: ["10-azure-docker-build-push"]
+#    types:
+#      - completed
+#
+#jobs:
+#  deploy:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#
+#      - name: SetupKubectl
+#        uses: azure/setup-kubectl@v4
+#        with:
+#          version: "v1.27.4"
+#
+#      - uses: azure/k8s-set-context@v4
+#        with:
+#          method: kubeconfig
+#          kubeconfig: ${{ secrets.KUBE_CONFIG_TESTING }}
+#
+#      - uses: syntaqx/setup-kustomize@v1
+#
+#
+#      - name: Build and deploy k8s manifests
+#        shell: bash
+#        env:
+#          STAGE_ID: testing
+#        run: |
+#          echo "deploying $STAGE_ID stage"
+#          KUSTOMIZE_OVERLAY_DIR="$GITHUB_WORKSPACE/k8s/$STAGE_ID/"
+#          cd $KUSTOMIZE_OVERLAY_DIR
+#          kustomize edit set image \
+#            assemblysuite.azurecr.io/assemblio-development/monorepo/the-server=assemblysuite.azurecr.io/snapshot/next-server:latest
+#          kustomize build | kubectl apply -f -
