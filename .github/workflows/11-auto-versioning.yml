@@ -2,8 +2,8 @@ name: 11-auto-versioning
 
 on:
   workflow_dispatch:
-#  push:
-#    branches: ['main']
+  push:
+    branches: ['main']
 
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
           fetch-depth: '0'
       - name: Minor version for each merge
         id: AutoTagger
-        uses: anothrNick/github-tag-action@1.36.0
+        uses: anothrNick/github-tag-action@1.67.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
