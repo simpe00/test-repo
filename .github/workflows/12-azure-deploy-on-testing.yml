@@ -22,4 +22,4 @@ jobs:
         env:
           VERSION: ${{ env.SOURCE_TAG }}
         run: |
-          echo "Tag is: ${SOURCE_TAG} and version: "
+          echo "Tag is: ${SOURCE_TAG} and version: ${VERSION}"

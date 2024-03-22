@@ -10,10 +10,10 @@ on:
     tags:
       - '**'
       - v**
-  workflow_run:
-    workflows: [11-auto-versioning]
-    types:
-      - completed
+#  workflow_run:
+#    workflows: [11-auto-versioning]
+#    types:
+#      - completed
 
 
 jobs:
@@ -26,10 +26,10 @@ jobs:
       - name: Get Tag Name
         id: tag_name
         run: |
-          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Show Tag Name
         env:
-          VERSION: ${{ steps.tag_name.outputs.SOURCE_TAG }}
+          VERSION: ${{ env.SOURCE_TAG }}
         run: |
-          echo "Tag is: ${VERSION}"
+          echo "Tag is: ${SOURCE_TAG} and version: ${VERSION}"
