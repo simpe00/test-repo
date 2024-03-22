@@ -24,3 +24,20 @@ jobs:
           VERSION: ${{ env.SOURCE_TAG }}
         run: |
           echo "Tag is: ${SOURCE_TAG} and version: ${VERSION}"
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get Tag Name
+        id: tag_name
+        run: |
+          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Show Tag Name
+        env:
+          VERSION: ${{ env.SOURCE_TAG }}
+        run: |
+          echo "Tag is: ${SOURCE_TAG} and version: ${VERSION}"
