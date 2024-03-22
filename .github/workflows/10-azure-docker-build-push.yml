@@ -1,6 +1,7 @@
 name: 10-azure-docker-build-push
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
