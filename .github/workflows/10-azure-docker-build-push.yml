@@ -1,11 +1,10 @@
 name: 10-azure-docker-build-push
 
 on:
-  create
-#  workflow_run:
-#    workflows: [11-auto-versioning]
-#    types:
-#      - completed
+  push:
+    tags:
+      - '**'
+      - v**
 
 
 jobs:

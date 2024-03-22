@@ -2,8 +2,8 @@ name: 11-auto-versioning
 
 on:
   workflow_dispatch:
-  push:
-    branches: ['main']
+#  push:
+#    branches: ['main']
 
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
-          DRY_RUN: false
+          DRY_RUN: true
 #          DEFAULT_BRANCH: build-push-deploy-testing
 
       - name: echo new tag
