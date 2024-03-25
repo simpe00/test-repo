@@ -14,18 +14,15 @@ jobs:
   patch-tag:
     runs-on: ubuntu-latest
     outputs:
-      new_tag: ${{ steps.tag_version.outputs.new_tag || steps.tag_name.outputs.SOURCE_TAG }}
-      new_tag2: ${{ steps.tag_name.outputs.SOURCE_TAG }}
-      previous_tag: ${{ steps.tag_version.outputs.previous_tag }}
+      new_tag: ${{ steps.tag_version.outputs.new_tag || steps.tag_name.outputs.source_tag }}
+      new_tag2: ${{ steps.tag_name.outputs.source_tag }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Get Tag Name
         id: tag_name
         if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}"
+        run: echo "source_tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
 
       - name: Bump version and push tag
         if: startsWith(github.ref, 'refs/tags/') != true
