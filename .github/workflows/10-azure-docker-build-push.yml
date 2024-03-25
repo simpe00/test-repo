@@ -26,7 +26,7 @@ jobs:
           echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Bump version and push tag
-#        if: ${{ cancelled() }}
+        if: ! ( startsWith(github.ref, 'refs/tags/'))
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.2
         with:
