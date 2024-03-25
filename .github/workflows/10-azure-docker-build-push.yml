@@ -14,11 +14,19 @@ jobs:
   patch-tag:
     runs-on: ubuntu-latest
     outputs:
-      new_tag: ${{ steps.tag_version.outputs.new_tag }}
+      new_tag: ${{ steps.tag_version.outputs.new_tag || steps.tag_name.outputs.SOURCE_TAG }}
       previous_tag: ${{ steps.tag_version.outputs.previous_tag }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Get Tag Name
+        id: tag_name
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
       - name: Bump version and push tag
+        if:  always() && failure()
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.2
         with:
@@ -26,12 +34,15 @@ jobs:
           tag_prefix: v
           dry_run: false
           default_bump: patch
+
       - name: Create a GitHub release
+        if:  always() && failure()
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
+
 
   build-push-docker:
     runs-on: ubuntu-latest
@@ -41,16 +52,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get Tag Name
-        id: tag_name
-        run: |
-          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
       - name: Show Tag Name
         env:
           VERSION: ${{ needs.patch-tag.outputs.new_tag }}
         run: |
-          echo "Tag is: ${SOURCE_TAG} and version: ${VERSION}"
+          echo "Tag is and version: ${VERSION}"
 
   deploy:
     runs-on: ubuntu-latest
@@ -61,13 +67,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get Tag Name
-        id: tag_name
-        run: |
-          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
       - name: Show Tag Name
         env:
           VERSION: ${{ needs.patch-tag.outputs.new_tag }}
         run: |
-          echo "Tag is: ${SOURCE_TAG} and version: ${VERSION}"
+          echo "Tag is and version: ${VERSION}"
