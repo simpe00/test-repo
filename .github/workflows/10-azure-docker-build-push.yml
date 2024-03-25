@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       new_tag: ${{ steps.tag_version.outputs.new_tag || steps.tag_name.outputs.SOURCE_TAG }}
+      new_tag2: ${{ steps.tag_name.outputs.SOURCE_TAG }}
       previous_tag: ${{ steps.tag_version.outputs.previous_tag }}
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +25,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}"
 
       - name: Bump version and push tag
         if: startsWith(github.ref, 'refs/tags/') != true
@@ -57,6 +59,12 @@ jobs:
           VERSION: ${{ needs.patch-tag.outputs.new_tag }}
         run: |
           echo "Tag is and version: ${VERSION}"
+
+      - name: Show Tag Name
+        env:
+          VERSION: ${{ needs.patch-tag.outputs.new_tag2 }}
+        run: |
+          echo "Tag is and version2: ${VERSION}"
 
   deploy:
     runs-on: ubuntu-latest
