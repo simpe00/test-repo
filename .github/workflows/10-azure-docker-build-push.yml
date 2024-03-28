@@ -78,11 +78,11 @@ jobs:
         run: |
           echo "changed for src"
 
-      - if: steps.changes.outputs.dir1 == 'true'
+      - if: steps.changes.outputs.${{ steps.path-def.outputs.path_1 }} == 'true'
         run: |
           echo "changed for dir1"
 
-      - if: steps.changes.outputs.dir2 == 'true'
+      - if: steps.changes.outputs.${{ steps.path-def.outputs.path_2 }} == 'true'
         run: |
           echo "changed for dir2"
 
