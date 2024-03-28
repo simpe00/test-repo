@@ -62,8 +62,9 @@ jobs:
           filters: |
             src:
               - 'test-file.yaml'
-            dir1:
+            ${{ needs.patch-tag.outputs.new_tag }}:
               - 'dir1/**'
+              - '${{ needs.patch-tag.outputs.new_tag }}'
             dir2:
               - 'dir2/**'
 
