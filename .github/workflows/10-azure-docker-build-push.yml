@@ -58,12 +58,14 @@ jobs:
 
       - uses: dorny/paths-filter@v3
         id: changes
+        env:
+          PATH_1: dir1
         with:
           filters: |
             src:
               - 'test-file.yaml'
             ${{ needs.patch-tag.outputs.new_tag }}:
-              - 'dir1/**'
+              - '${PATH_1}/**'
               - '${{ needs.patch-tag.outputs.new_tag }}'
             dir2:
               - 'dir2/**'
