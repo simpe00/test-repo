@@ -74,15 +74,11 @@ jobs:
 
       - if: steps.changes.outputs.dir1 == 'true'
         run: |
-          echo "changed for src"
+          echo "changed for dir1"
 
       - if: steps.changes.outputs.dir2 == 'true'
         run: |
-          echo "changed for src"
-
-      - if: steps.changes.outputs.src == 'true'
-        run: |
-          echo "changed for src"
+          echo "changed for dir2"
 
   deploy:
     runs-on: ubuntu-latest
