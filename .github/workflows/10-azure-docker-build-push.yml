@@ -65,7 +65,7 @@ jobs:
             src:
               - 'test-file.yaml'
             ${{ needs.patch-tag.outputs.new_tag }}:
-              - '${PATH_1}/**'
+              - "${PATH_1}/**"
               - '${{ needs.patch-tag.outputs.new_tag }}'
             dir2:
               - 'dir2/**'
