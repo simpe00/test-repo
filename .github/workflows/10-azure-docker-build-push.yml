@@ -67,7 +67,6 @@ jobs:
             src:
               - 'test-file.yaml'
             ${{ steps.path-def.outputs.path_1 }}:
-              - "${PATH_1}/**"
               - '${{ steps.path-def.outputs.path_1 }}/**'
               - "${{ steps.path-def.outputs.path_1 }}/**"
             dir2:
