@@ -62,13 +62,14 @@ jobs:
           PATH_1: dir1
         with:
           filters: |
-            src:
+            ${PATH_1}:
               - 'test-file.yaml'
             ${{ needs.patch-tag.outputs.new_tag }}:
               - "${PATH_1}/**"
               - '${{ needs.patch-tag.outputs.new_tag }}'
             dir2:
               - 'dir2/**'
+              - "dir1/**"
 
         # run only if some file in 'src' folder was changed
       - if: steps.changes.outputs.src == 'true'
