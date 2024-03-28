@@ -56,20 +56,22 @@ jobs:
         run: |
           echo "Tag is: ${VERSION}"
 
+      - name: Define Path
+        id: path-def
+        run: echo "path_1=dir1" >> "$GITHUB_OUTPUT"
+
       - uses: dorny/paths-filter@v3
         id: changes
-        env:
-          PATH_1: dir1
         with:
           filters: |
-            ${PATH_1}:
+            src:
               - 'test-file.yaml'
-            ${{ needs.patch-tag.outputs.new_tag }}:
+            ${{ steps.path-def.outputs.path_1 }}:
               - "${PATH_1}/**"
-              - '${{ needs.patch-tag.outputs.new_tag }}'
+              - '${{ steps.path-def.outputs.path_1 }}/**'
+              - "${{ steps.path-def.outputs.path_1 }}/**"
             dir2:
-              - 'dir2/**'
-              - "dir1/**"
+              - "dir2/**"
 
         # run only if some file in 'src' folder was changed
       - if: steps.changes.outputs.src == 'true'
