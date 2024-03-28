@@ -56,6 +56,34 @@ jobs:
         run: |
           echo "Tag is: ${VERSION}"
 
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'test-file.yaml'
+            dir1:
+              - 'dir1/**'
+            dir2:
+              - 'dir2/**'
+
+        # run only if some file in 'src' folder was changed
+      - if: steps.changes.outputs.src == 'true'
+        run: |
+          echo "changed for src"
+
+      - if: steps.changes.outputs.dir1 == 'true'
+        run: |
+          echo "changed for src"
+
+      - if: steps.changes.outputs.dir2 == 'true'
+        run: |
+          echo "changed for src"
+
+      - if: steps.changes.outputs.src == 'true'
+        run: |
+          echo "changed for src"
+
   deploy:
     runs-on: ubuntu-latest
     needs:
