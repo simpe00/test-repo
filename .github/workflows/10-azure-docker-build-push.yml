@@ -58,7 +58,9 @@ jobs:
 
       - name: Define Path
         id: path-def
-        run: echo "path_1=dir1" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "path_1=dir1" >> "$GITHUB_OUTPUT"
+          echo "path_2=dir2" >> "$GITHUB_OUTPUT"
 
       - uses: dorny/paths-filter@v3
         id: changes
@@ -67,10 +69,9 @@ jobs:
             src:
               - 'test-file.yaml'
             ${{ steps.path-def.outputs.path_1 }}:
-              - '${{ steps.path-def.outputs.path_1 }}/**'
               - "${{ steps.path-def.outputs.path_1 }}/**"
-            dir2:
-              - "dir2/**"
+            ${{ steps.path-def.outputs.path_2 }}:
+              - "${{ steps.path-def.outputs.path_2 }}/**"
 
         # run only if some file in 'src' folder was changed
       - if: steps.changes.outputs.src == 'true'
