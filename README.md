@@ -1,2 +1,3 @@
-# test-repo
-just for testing 4
+# Usage
+
+just push code to the repo an make a conventional commit: 
